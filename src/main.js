@@ -2,7 +2,7 @@
 import BootState from './BootState';
 import LoadState from './LoadState';
 import PlayState from './PlayState';
-import MenuState from './MenuState';
+import MenuState from './MenuState.ts';
 import EndState from './EndState';
 
 function onStateChange (current, prev) {

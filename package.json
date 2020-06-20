@@ -1,7 +1,7 @@
 {
   "name": "phaser-ce-parcel",
   "version": "1.0.0",
-  "description": "A Phaser 3 game template using Parcel bundler",
+  "description": "Skies",
   "main": "src/index.html",
   "scripts": {
     "build": "parcel build src/index.html --public-url ./ --experimental-scope-hoisting",
@@ -18,7 +18,7 @@
   "author": "samme",
   "license": "ISC",
   "dependencies": {
-    "phaser-ce": "^2.15.1"
+    "phaser-ce": "^2.16.0"
   },
   "devDependencies": {
     "cssnano": "^4.1.10",
@@ -28,6 +28,7 @@
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-promise": "^4.1.1",
-    "eslint-plugin-standard": "^4.0.0"
+    "eslint-plugin-standard": "^4.0.0",
+    "typescript": "^3.9.5"
   }
 }
