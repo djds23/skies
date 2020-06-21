@@ -381,20 +381,7 @@ function (_super) {
 
   PlayState.prototype.update = function () {
     var arcade = this.physics.arcade;
-
-    if (cursors.up.isDown) {
-      arcade.accelerationFromRotation(plane.rotation, 200, plane.body.acceleration);
-    } else {
-      plane.body.acceleration.set(0);
-    }
-
-    if (cursors.left.isDown) {
-      plane.body.angularVelocity = -300;
-    } else if (cursors.right.isDown) {
-      plane.body.angularVelocity = 300;
-    } else {
-      plane.body.angularVelocity = 0;
-    }
+    arcade.moveToPointer(plane, 200, this.input.activePointer);
   };
 
   return PlayState;
@@ -568,8 +555,9 @@ function destroyGame() {
 
 var gameConfig = {
   renderer: Phaser.CANVAS,
-  width: 800,
-  height: 600
+  width: 1920,
+  height: 1080,
+  scaleMode: Phaser.ScaleManager.RESIZE
 };
 var game;
 Phaser.Point.set(PIXI.Sprite.defaultAnchor, 0.5, 0.5);
@@ -609,7 +597,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55430" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63098" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

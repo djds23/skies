@@ -34,16 +34,6 @@ export default class PlayState extends Phaser.State {
 
   update() {
     const { arcade } = this.physics;
-    if (cursors.up.isDown) {
-        arcade.accelerationFromRotation(plane.rotation, 200, plane.body.acceleration);
-    } else {
-        plane.body.acceleration.set(0);
-    } if (cursors.left.isDown) {
-        plane.body.angularVelocity = -300;
-    } else if (cursors.right.isDown) {
-        plane.body.angularVelocity = 300;
-    } else {
-        plane.body.angularVelocity = 0;
-    }
+    arcade.moveToPointer(plane, 200, this.input.activePointer);
   }
 }

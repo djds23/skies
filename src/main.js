@@ -32,8 +32,9 @@ function destroyGame () {
 
 const gameConfig = {
   renderer: Phaser.CANVAS,
-  width: 800,
-  height: 600
+  width: 1920,
+  height: 1080,
+  scaleMode: Phaser.ScaleManager.RESIZE
 };
 
 let game;
