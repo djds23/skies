@@ -9,6 +9,7 @@ class Asset {
 
 
 export default class Assets {
-  plane = new Asset(images.plane);
+  porco = new Asset(images.porco);
+  marco = new Asset(images.marco);
   bullet = new Asset(images.bullet);
 } 

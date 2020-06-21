@@ -1,8 +1,10 @@
 export default class MenuState extends Phaser.State {
   create () {
     const { centerX, centerY } = this.world;
+    const { stage } = this;
 
-    const title = this.add.text(centerX, centerY, 'Phaser CE with Parcel\n\n< play >', {
+    stage.setBackgroundColor("#87CEEB");
+    this.add.text(centerX, centerY, 'Phaser CE with Parcel\n\n< play >', {
       align: 'center',
       fill: 'white',
       fontSize: 48

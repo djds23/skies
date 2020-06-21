@@ -177,14 +177,17 @@ var BootState = /*#__PURE__*/function (_Phaser$State) {
 exports.default = BootState;
 },{}],"assets/bullet.png":[function(require,module,exports) {
 module.exports = "/bullet.6a8026eb.png";
-},{}],"assets/plane.png":[function(require,module,exports) {
-module.exports = "/plane.aa711092.png";
+},{}],"assets/marco.png":[function(require,module,exports) {
+module.exports = "/marco.9cf58d06.png";
+},{}],"assets/porco.png":[function(require,module,exports) {
+module.exports = "/porco.e790cde5.png";
 },{}],"assets/*.png":[function(require,module,exports) {
 module.exports = {
   "bullet": require("./bullet.png"),
-  "plane": require("./plane.png")
+  "marco": require("./marco.png"),
+  "porco": require("./porco.png")
 };
-},{"./bullet.png":"assets/bullet.png","./plane.png":"assets/plane.png"}],"Assets.js":[function(require,module,exports) {
+},{"./bullet.png":"assets/bullet.png","./marco.png":"assets/marco.png","./porco.png":"assets/porco.png"}],"Assets.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -210,7 +213,9 @@ var Asset = function Asset(path) {
 var Assets = function Assets() {
   _classCallCheck(this, Assets);
 
-  _defineProperty(this, "plane", new Asset(_.default.plane));
+  _defineProperty(this, "porco", new Asset(_.default.porco));
+
+  _defineProperty(this, "marco", new Asset(_.default.marco));
 
   _defineProperty(this, "bullet", new Asset(_.default.bullet));
 };
@@ -268,7 +273,8 @@ function (_super) {
 
   LoadState.prototype.preload = function () {
     var assets = new Assets_js_1.default();
-    this.load.image(assets.plane.key, assets.plane.path);
+    this.load.image(assets.porco.key, assets.porco.path);
+    this.load.image(assets.marco.key, assets.marco.path);
     this.load.image(assets.bullet.key, assets.bullet.path);
   };
 
@@ -336,12 +342,13 @@ var _a = Phaser.KeyCode,
     RIGHT = _a.RIGHT,
     UP = _a.UP,
     DOWN = _a.DOWN;
-var plane;
+var porco;
+var marco;
 var assets = new Assets_js_1.default();
 var cursors;
 var bullets;
 var fireRate = 100;
-var bulletSpeed = 200;
+var bulletSpeed = 400;
 var nextFire = 0;
 
 var PlayState =
@@ -362,8 +369,6 @@ function (_super) {
 
     var keyboard = input.keyboard;
     var arcade = this.physics.arcade;
-    var stage = this.stage;
-    stage.setBackgroundColor("#87CEEB");
     var _b = this.world,
         centerX = _b.centerX,
         centerY = _b.centerY;
@@ -373,13 +378,19 @@ function (_super) {
     bullets.createMultiple(50, assets.bullet.key);
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
-    plane = add.sprite(centerX, centerY, assets.plane.key);
-    arcade.enable(plane);
+    porco = add.sprite(centerX, centerY, assets.porco.key);
+    porco.scale.setTo(1.5, 1.5);
+    arcade.enable(porco);
+    marco = add.sprite(0, 0, assets.marco.key);
+    marco.scale.setTo(1.5, 1.5);
+    marco.rotation = Math.PI;
+    marco.checkWorldBounds = true;
+    marco.outOfBoundsKill = true;
     add.text(120, 20, '(R) Restart | (Q) Quit', {
       fill: 'white',
       font: '24px sans-serif'
     });
-    plane.bringToTop();
+    porco.bringToTop();
     keyboard.addKey(Q).onDown.addOnce(function () {
       _this.state.start('menu');
     });
@@ -389,12 +400,16 @@ function (_super) {
     cursors = keyboard.createCursorKeys();
   };
 
+  PlayState.prototype.marcoStartingPosition = function () {
+    return Phaser.Math.random(0, this.stage.width);
+  };
+
   PlayState.prototype.update = function () {
     var arcade = this.physics.arcade;
     var activePointer = this.input.activePointer;
 
     if (activePointer.isDown) {
-      arcade.moveToPointer(plane, 200, activePointer);
+      arcade.moveToPointer(porco, 200, activePointer);
     } else {
       this.fire();
     }
@@ -404,8 +419,8 @@ function (_super) {
     if (this.time.now > nextFire && bullets.countDead() > 0) {
       nextFire = this.time.now + fireRate;
       var bullet = bullets.getFirstDead();
-      bullet.reset(plane.x - 8, plane.y - 8);
-      this.physics.arcade.moveToXY(bullet, plane.x, -100, bulletSpeed);
+      bullet.reset(porco.x, porco.y - 16);
+      this.physics.arcade.moveToXY(bullet, porco.x, -100, bulletSpeed);
     }
   };
 
@@ -461,7 +476,9 @@ function (_super) {
     var _a = this.world,
         centerX = _a.centerX,
         centerY = _a.centerY;
-    var title = this.add.text(centerX, centerY, 'Phaser CE with Parcel\n\n< play >', {
+    var stage = this.stage;
+    stage.setBackgroundColor("#87CEEB");
+    this.add.text(centerX, centerY, 'Phaser CE with Parcel\n\n< play >', {
       align: 'center',
       fill: 'white',
       fontSize: 48
@@ -622,7 +639,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64404" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54893" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
