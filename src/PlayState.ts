@@ -5,6 +5,10 @@ const { Q, R, LEFT, RIGHT, UP, DOWN } = Phaser.KeyCode;
 let plane: Phaser.Sprite;
 let assets = new Assets();
 let cursors: Phaser.CursorKeys
+let bullets: Phaser.Group
+const fireRate = 100;
+const bulletSpeed = 200;
+let nextFire = 0;
 
 export default class PlayState extends Phaser.State {
   create () {
@@ -12,16 +16,20 @@ export default class PlayState extends Phaser.State {
     const { keyboard } = input;
     const { arcade } = this.physics;
     const { stage } = this;
-    
+    stage.setBackgroundColor("#87CEEB");
+
     const { centerX, centerY } = this.world;
 
-    arcade.gravity.y = 300;
-    stage.setBackgroundColor("#87CEEB");
+    bullets = add.group();
+    bullets.enableBody = true;
+    bullets.physicsBodyType = Phaser.Physics.ARCADE;
+
+    bullets.createMultiple(50, assets.bullet.key);
+    bullets.setAll('checkWorldBounds', true);
+    bullets.setAll('outOfBoundsKill', true);
     
     plane = add.sprite(centerX, centerY, assets.plane.key);
     arcade.enable(plane);
-    plane.checkWorldBounds = true;
-    plane.body.allowGravity = false;
 
     add.text(120, 20, '(R) Restart | (Q) Quit', { fill: 'white', font: '24px sans-serif' });
 
@@ -34,6 +42,20 @@ export default class PlayState extends Phaser.State {
 
   update() {
     const { arcade } = this.physics;
-    arcade.moveToPointer(plane, 200, this.input.activePointer);
+    const { activePointer } = this.input;
+    if (activePointer.isDown) {
+      arcade.moveToPointer(plane, 200, activePointer);
+    } else {
+      this.fire();
+    }
+  }
+
+  fire() {
+    if (this.time.now > nextFire && bullets.countDead() > 0) {
+        nextFire = this.time.now + fireRate;
+        let bullet = bullets.getFirstDead();
+        bullet.reset(plane.x - 8, plane.y - 8);
+        this.physics.arcade.moveToXY(bullet, plane.x, -100, bulletSpeed);
+    }
   }
 }

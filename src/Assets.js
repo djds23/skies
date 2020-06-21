@@ -10,4 +10,5 @@ class Asset {
 
 export default class Assets {
   plane = new Asset(images.plane);
+  bullet = new Asset(images.bullet);
 } 

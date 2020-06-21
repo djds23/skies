@@ -175,13 +175,16 @@ var BootState = /*#__PURE__*/function (_Phaser$State) {
 }(Phaser.State);
 
 exports.default = BootState;
+},{}],"assets/bullet.png":[function(require,module,exports) {
+module.exports = "/bullet.6a8026eb.png";
 },{}],"assets/plane.png":[function(require,module,exports) {
 module.exports = "/plane.aa711092.png";
 },{}],"assets/*.png":[function(require,module,exports) {
 module.exports = {
+  "bullet": require("./bullet.png"),
   "plane": require("./plane.png")
 };
-},{"./plane.png":"assets/plane.png"}],"Assets.js":[function(require,module,exports) {
+},{"./bullet.png":"assets/bullet.png","./plane.png":"assets/plane.png"}],"Assets.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -208,6 +211,8 @@ var Assets = function Assets() {
   _classCallCheck(this, Assets);
 
   _defineProperty(this, "plane", new Asset(_.default.plane));
+
+  _defineProperty(this, "bullet", new Asset(_.default.bullet));
 };
 
 exports.default = Assets;
@@ -262,11 +267,9 @@ function (_super) {
   }
 
   LoadState.prototype.preload = function () {
-    var _a = this.world,
-        centerX = _a.centerX,
-        centerY = _a.centerY;
     var assets = new Assets_js_1.default();
     this.load.image(assets.plane.key, assets.plane.path);
+    this.load.image(assets.bullet.key, assets.bullet.path);
   };
 
   LoadState.prototype.loadUpdate = function () {
@@ -336,6 +339,10 @@ var _a = Phaser.KeyCode,
 var plane;
 var assets = new Assets_js_1.default();
 var cursors;
+var bullets;
+var fireRate = 100;
+var bulletSpeed = 200;
+var nextFire = 0;
 
 var PlayState =
 /** @class */
@@ -356,15 +363,18 @@ function (_super) {
     var keyboard = input.keyboard;
     var arcade = this.physics.arcade;
     var stage = this.stage;
+    stage.setBackgroundColor("#87CEEB");
     var _b = this.world,
         centerX = _b.centerX,
         centerY = _b.centerY;
-    arcade.gravity.y = 300;
-    stage.setBackgroundColor("#87CEEB");
+    bullets = add.group();
+    bullets.enableBody = true;
+    bullets.physicsBodyType = Phaser.Physics.ARCADE;
+    bullets.createMultiple(50, assets.bullet.key);
+    bullets.setAll('checkWorldBounds', true);
+    bullets.setAll('outOfBoundsKill', true);
     plane = add.sprite(centerX, centerY, assets.plane.key);
     arcade.enable(plane);
-    plane.checkWorldBounds = true;
-    plane.body.allowGravity = false;
     add.text(120, 20, '(R) Restart | (Q) Quit', {
       fill: 'white',
       font: '24px sans-serif'
@@ -381,7 +391,22 @@ function (_super) {
 
   PlayState.prototype.update = function () {
     var arcade = this.physics.arcade;
-    arcade.moveToPointer(plane, 200, this.input.activePointer);
+    var activePointer = this.input.activePointer;
+
+    if (activePointer.isDown) {
+      arcade.moveToPointer(plane, 200, activePointer);
+    } else {
+      this.fire();
+    }
+  };
+
+  PlayState.prototype.fire = function () {
+    if (this.time.now > nextFire && bullets.countDead() > 0) {
+      nextFire = this.time.now + fireRate;
+      var bullet = bullets.getFirstDead();
+      bullet.reset(plane.x - 8, plane.y - 8);
+      this.physics.arcade.moveToXY(bullet, plane.x, -100, bulletSpeed);
+    }
   };
 
   return PlayState;
@@ -554,9 +579,9 @@ function destroyGame() {
 }
 
 var gameConfig = {
-  renderer: Phaser.CANVAS,
-  width: 1920,
-  height: 1080,
+  renderer: Phaser.AUTO,
+  width: window.width,
+  height: window.height,
   scaleMode: Phaser.ScaleManager.RESIZE
 };
 var game;
@@ -597,7 +622,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63098" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64404" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

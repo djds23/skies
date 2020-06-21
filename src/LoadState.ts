@@ -2,9 +2,9 @@ import Assets from "./Assets.js";
 
 export default class LoadState extends Phaser.State {
   preload () {
-    const { centerX, centerY } = this.world;
     const assets = new Assets();
     this.load.image(assets.plane.key, assets.plane.path);
+    this.load.image(assets.bullet.key, assets.bullet.path);
   }
 
   loadUpdate () {
