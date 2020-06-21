@@ -1,11 +1,10 @@
-import logo from './assets/logo.png';
-
 export default class BootState extends Phaser.State {
   preload () {
-    this.load.image('logo', logo);
+    console.log("booting...")
   }
 
   create () {
+    console.log("entering load...")
     this.state.start('load');
   }
 }

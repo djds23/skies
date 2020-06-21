@@ -117,19 +117,13 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"assets/logo.png":[function(require,module,exports) {
-module.exports = "/logo.e9a9c890.png";
-},{}],"BootState.js":[function(require,module,exports) {
+})({"BootState.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-
-var _logo = _interopRequireDefault(require("./assets/logo.png"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -167,11 +161,12 @@ var BootState = /*#__PURE__*/function (_Phaser$State) {
   _createClass(BootState, [{
     key: "preload",
     value: function preload() {
-      this.load.image('logo', _logo.default);
+      console.log("booting...");
     }
   }, {
     key: "create",
     value: function create() {
+      console.log("entering load...");
       this.state.start('load');
     }
   }]);
@@ -180,26 +175,13 @@ var BootState = /*#__PURE__*/function (_Phaser$State) {
 }(Phaser.State);
 
 exports.default = BootState;
-},{"./assets/logo.png":"assets/logo.png"}],"assets/blue.png":[function(require,module,exports) {
-module.exports = "/blue.ff936692.png";
-},{}],"assets/phaser1.png":[function(require,module,exports) {
-module.exports = "/phaser1.42aaccae.png";
-},{}],"assets/red.png":[function(require,module,exports) {
-module.exports = "/red.5c208bbd.png";
-},{}],"assets/space.png":[function(require,module,exports) {
-module.exports = "/space.89e3a46b.png";
-},{}],"assets/yellow.png":[function(require,module,exports) {
-module.exports = "/yellow.b17ca5c8.png";
+},{}],"assets/plane.png":[function(require,module,exports) {
+module.exports = "/plane.aa711092.png";
 },{}],"assets/*.png":[function(require,module,exports) {
 module.exports = {
-  "blue": require("./blue.png"),
-  "logo": require("./logo.png"),
-  "phaser1": require("./phaser1.png"),
-  "red": require("./red.png"),
-  "space": require("./space.png"),
-  "yellow": require("./yellow.png")
+  "plane": require("./plane.png")
 };
-},{"./blue.png":"assets/blue.png","./logo.png":"assets/logo.png","./phaser1.png":"assets/phaser1.png","./red.png":"assets/red.png","./space.png":"assets/space.png","./yellow.png":"assets/yellow.png"}],"LoadState.js":[function(require,module,exports) {
+},{"./plane.png":"assets/plane.png"}],"Assets.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -211,173 +193,215 @@ var _ = _interopRequireDefault(require("./assets/*.png"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+var Asset = function Asset(path) {
+  _classCallCheck(this, Asset);
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+  this.path = path;
+  this.key = path;
+};
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+var Assets = function Assets() {
+  _classCallCheck(this, Assets);
 
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+  _defineProperty(this, "plane", new Asset(_.default.plane));
+};
 
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+exports.default = Assets;
+},{"./assets/*.png":"assets/*.png"}],"LoadState.ts":[function(require,module,exports) {
+"use strict";
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+var __extends = this && this.__extends || function () {
+  var _extendStatics = function extendStatics(d, b) {
+    _extendStatics = Object.setPrototypeOf || {
+      __proto__: []
+    } instanceof Array && function (d, b) {
+      d.__proto__ = b;
+    } || function (d, b) {
+      for (var p in b) {
+        if (b.hasOwnProperty(p)) d[p] = b[p];
+      }
+    };
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+    return _extendStatics(d, b);
+  };
 
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+  return function (d, b) {
+    _extendStatics(d, b);
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+    function __() {
+      this.constructor = d;
+    }
 
-var LoadState = /*#__PURE__*/function (_Phaser$State) {
-  _inherits(LoadState, _Phaser$State);
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
 
-  var _super = _createSuper(LoadState);
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var Assets_js_1 = __importDefault(require("./Assets.js"));
+
+var LoadState =
+/** @class */
+function (_super) {
+  __extends(LoadState, _super);
 
   function LoadState() {
-    _classCallCheck(this, LoadState);
-
-    return _super.apply(this, arguments);
+    return _super !== null && _super.apply(this, arguments) || this;
   }
 
-  _createClass(LoadState, [{
-    key: "preload",
-    value: function preload() {
-      var _this$world = this.world,
-          centerX = _this$world.centerX,
-          centerY = _this$world.centerY;
-      var ghost = this.add.image(centerX, centerY, 'logo');
-      var logo = this.add.image(centerX, centerY, 'logo');
-      ghost.alpha = 0.2;
-      ghost.blendMode = Phaser.blendModes.LUMINOSITY;
-      this.load.setPreloadSprite(logo);
-      this.load.image('space', _.default.space);
-      this.load.image('planet', _.default.phaser1);
-      this.load.image('red', _.default.red);
-      this.load.image('yellow', _.default.yellow);
-      this.load.image('blue', _.default.blue);
-    }
-  }, {
-    key: "loadUpdate",
-    value: function loadUpdate() {
-      console.debug('progress', this.load.progress);
-    }
-  }, {
-    key: "loadRender",
-    value: function loadRender() {
-      this.game.debug.loader(this.load, 20, 20);
-    }
-  }, {
-    key: "create",
-    value: function create() {
-      this.state.start('menu'); // this.state.start('play');
-    }
-  }]);
+  LoadState.prototype.preload = function () {
+    var _a = this.world,
+        centerX = _a.centerX,
+        centerY = _a.centerY;
+    var assets = new Assets_js_1.default();
+    this.load.image(assets.plane.key, assets.plane.path);
+  };
+
+  LoadState.prototype.loadUpdate = function () {
+    console.debug('progress', this.load.progress);
+  };
+
+  LoadState.prototype.loadRender = function () {
+    this.game.debug.loader(this.load, 20, 20);
+  };
+
+  LoadState.prototype.create = function () {
+    this.state.start('menu');
+  };
 
   return LoadState;
 }(Phaser.State);
 
 exports.default = LoadState;
-},{"./assets/*.png":"assets/*.png"}],"PlayState.js":[function(require,module,exports) {
+},{"./Assets.js":"Assets.js"}],"PlayState.ts":[function(require,module,exports) {
 "use strict";
+
+var __extends = this && this.__extends || function () {
+  var _extendStatics = function extendStatics(d, b) {
+    _extendStatics = Object.setPrototypeOf || {
+      __proto__: []
+    } instanceof Array && function (d, b) {
+      d.__proto__ = b;
+    } || function (d, b) {
+      for (var p in b) {
+        if (b.hasOwnProperty(p)) d[p] = b[p];
+      }
+    };
+
+    return _extendStatics(d, b);
+  };
+
+  return function (d, b) {
+    _extendStatics(d, b);
+
+    function __() {
+      this.constructor = d;
+    }
+
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+var Assets_js_1 = __importDefault(require("./Assets.js"));
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _a = Phaser.KeyCode,
+    Q = _a.Q,
+    R = _a.R,
+    LEFT = _a.LEFT,
+    RIGHT = _a.RIGHT,
+    UP = _a.UP,
+    DOWN = _a.DOWN;
+var plane;
+var assets = new Assets_js_1.default();
+var cursors;
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-var _Phaser$KeyCode = Phaser.KeyCode,
-    Q = _Phaser$KeyCode.Q,
-    R = _Phaser$KeyCode.R;
-var emitter;
-var logo;
-
-var PlayState = /*#__PURE__*/function (_Phaser$State) {
-  _inherits(PlayState, _Phaser$State);
-
-  var _super = _createSuper(PlayState);
+var PlayState =
+/** @class */
+function (_super) {
+  __extends(PlayState, _super);
 
   function PlayState() {
-    _classCallCheck(this, PlayState);
-
-    return _super.apply(this, arguments);
+    return _super !== null && _super.apply(this, arguments) || this;
   }
 
-  _createClass(PlayState, [{
-    key: "create",
-    value: function create() {
-      var _this = this;
+  PlayState.prototype.create = function () {
+    var _this = this;
 
-      var add = this.add,
-          input = this.input;
-      var keyboard = input.keyboard;
-      var arcade = this.physics.arcade;
-      arcade.gravity.y = 300;
-      add.image(400, 300, 'space');
-      logo = add.sprite(0, 0, 'planet');
-      arcade.enable(logo);
-      logo.body.angularVelocity = 30;
-      logo.body.bounce.set(1, 1);
-      logo.body.velocity.set(120, 120);
-      logo.body.collideWorldBounds = true;
-      emitter = add.emitter(logo.centerX, logo.centerY);
-      emitter.makeParticles('yellow', 0, 120);
-      emitter.blendMode = Phaser.blendModes.ADD;
-      emitter.setAngle(0, 0, 0, 120);
-      emitter.setRotation(0, 0);
-      emitter.setScale(0.1, 0.2, 0.1, 0.2);
-      emitter.flow(2000, this.time.physicsElapsedMS);
-      add.text(120, 20, '(R) Restart | (Q) Quit', {
-        fill: 'white',
-        font: '24px sans-serif'
-      });
-      logo.bringToTop();
-      keyboard.addKey(Q).onDown.addOnce(function () {
-        _this.state.start('menu');
-      });
-      keyboard.addKey(R).onDown.addOnce(function () {
-        _this.state.restart();
-      });
+    var _a = this,
+        add = _a.add,
+        input = _a.input;
+
+    var keyboard = input.keyboard;
+    var arcade = this.physics.arcade;
+    var stage = this.stage;
+    var _b = this.world,
+        centerX = _b.centerX,
+        centerY = _b.centerY;
+    arcade.gravity.y = 300;
+    stage.setBackgroundColor("#87CEEB");
+    plane = add.sprite(centerX, centerY, assets.plane.key);
+    arcade.enable(plane);
+    plane.checkWorldBounds = true;
+    plane.body.allowGravity = false;
+    add.text(120, 20, '(R) Restart | (Q) Quit', {
+      fill: 'white',
+      font: '24px sans-serif'
+    });
+    plane.bringToTop();
+    keyboard.addKey(Q).onDown.addOnce(function () {
+      _this.state.start('menu');
+    });
+    keyboard.addKey(R).onDown.addOnce(function () {
+      _this.state.restart();
+    });
+    cursors = keyboard.createCursorKeys();
+  };
+
+  PlayState.prototype.update = function () {
+    var arcade = this.physics.arcade;
+
+    if (cursors.up.isDown) {
+      arcade.accelerationFromRotation(plane.rotation, 200, plane.body.acceleration);
+    } else {
+      plane.body.acceleration.set(0);
     }
-  }, {
-    key: "update",
-    value: function update() {
-      emitter.emitX = logo.centerX;
-      emitter.emitY = logo.centerY;
+
+    if (cursors.left.isDown) {
+      plane.body.angularVelocity = -300;
+    } else if (cursors.right.isDown) {
+      plane.body.angularVelocity = 300;
+    } else {
+      plane.body.angularVelocity = 0;
     }
-  }]);
+  };
 
   return PlayState;
 }(Phaser.State);
 
 exports.default = PlayState;
-},{}],"MenuState.ts":[function(require,module,exports) {
+},{"./Assets.js":"Assets.js"}],"MenuState.ts":[function(require,module,exports) {
 "use strict";
 
 var __extends = this && this.__extends || function () {
@@ -425,7 +449,6 @@ function (_super) {
     var _a = this.world,
         centerX = _a.centerX,
         centerY = _a.centerY;
-    this.add.image(centerX, centerY, 'space');
     var title = this.add.text(centerX, centerY, 'Phaser CE with Parcel\n\n< play >', {
       align: 'center',
       fill: 'white',
@@ -511,9 +534,9 @@ exports.default = EndScene;
 
 var _BootState = _interopRequireDefault(require("./BootState"));
 
-var _LoadState = _interopRequireDefault(require("./LoadState"));
+var _LoadState = _interopRequireDefault(require("./LoadState.ts"));
 
-var _PlayState = _interopRequireDefault(require("./PlayState"));
+var _PlayState = _interopRequireDefault(require("./PlayState.ts"));
 
 var _MenuState = _interopRequireDefault(require("./MenuState.ts"));
 
@@ -558,7 +581,7 @@ if (module.hot) {
 }
 
 if (!game) newGame();
-},{"./BootState":"BootState.js","./LoadState":"LoadState.js","./PlayState":"PlayState.js","./MenuState.ts":"MenuState.ts","./EndState":"EndState.js"}],"../../../.nvm/versions/node/v12.16.2/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./BootState":"BootState.js","./LoadState.ts":"LoadState.ts","./PlayState.ts":"PlayState.ts","./MenuState.ts":"MenuState.ts","./EndState":"EndState.js"}],"../../../.nvm/versions/node/v12.16.2/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -586,7 +609,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58800" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55430" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -1,7 +1,6 @@
-
 import BootState from './BootState';
-import LoadState from './LoadState';
-import PlayState from './PlayState';
+import LoadState from './LoadState.ts';
+import PlayState from './PlayState.ts';
 import MenuState from './MenuState.ts';
 import EndState from './EndState';
 
